@@ -3,7 +3,7 @@
 
 ### Install
 
-clone this repository:  https://github.com/patpragman/notapy.githttps://github.com/patpragman/notapy.git
+clone this repository:  https://github.com/patpragman/notapy.git
 
 run the following code:
 ```
