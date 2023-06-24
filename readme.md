@@ -1,14 +1,48 @@
 # Hi!  Welcome to NotaPy
 ## Pat Pragman's extremely simple note tool
 
+### Install
+
+clone this repository:  https://github.com/patpragman/notapy.githttps://github.com/patpragman/notapy.git
+
+run the following code:
+```
+# make a virtual environment:
+python -m venv venv
+
+# turn it on
+source venv/bin/activate
+
+# install the requirements (which is really only the toml library)
+pip install -r requirements.txt
+
+# run with
+
+python main.py
+```
+
+
 ### Features
 
 * Customizable Syntax Highlighting
 * Clickable Links for example github.com/patpragman
-* more examples www.google.com
 * fully searchable with regex
 
-### Future Ideas
+### Current Bugs
 
-* LaTex Support
+Sorry, cut and paste menus are still behaving strangely, like this was like 3 hours work today while my kids were playing.
+I will fix it.
+
+You can sometimes get into situations where you get regex errors, they aren't really handled but the command line may
+get cluttered up.
+
+
+### Future Plans
+
+* LaTex Support - I would like real time latex rendering
+* more formatting stuff - in particular a regex for code
+* LLM support where you could highlight text, right click on it, then have chatgpt improve the writing
+* some popup cheat sheets for regex stuff
+* darkmode
+* export to pdf?
 * image embedding?
