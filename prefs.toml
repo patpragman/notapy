@@ -1,0 +1,18 @@
+[match]
+foreground = "white"
+background = "blue"
+underline = 1
+
+["(?<=# )(.*)(?=$)"]
+font=["Helvetica", 18, "bold"]
+
+["(?<=## )(.*)(?=$)"]
+font=["Helvetica", 14, "bold"]
+
+["(?<=### )(.*)(?=$)"]
+font=["Helvetica", 12, "bold"]
+
+["(?i)\\b((?:https?://|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()[\\]{};:'\".,<>?«»“”‘’]))"]
+foreground = "blue"
+underline = 1
+clickable = 1
