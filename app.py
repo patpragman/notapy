@@ -208,7 +208,10 @@ program.  Select "Yes" to create a new file, "No" to open a different file, and 
             if tag.clickable:
 
                 if not os.path.isfile(tag.name):
-                    url = f"https://{tag.name}"
+                    if "https://" not in tag.name:
+                        url = f"https://{tag.name}"
+                    else:
+                        url = tag.name
                 else:
                     url = tag.name
 
