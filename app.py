@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
+from tkinter import messagebox
 import re
 import webbrowser
 
@@ -119,6 +120,7 @@ class App:
             self._save(None)  # save what you were working on
             self._clear()
             self.file_path_variable.set(fn)
+            os.system(f"touch {fn}")
             self._load(None)
 
     def select_file_from_picker(self):
@@ -140,6 +142,17 @@ class App:
                                      notes_file.read()
                                      )
         except FileNotFoundError as file_error:
+            prompt = """I cannot find the file you were last working on, that or this is your first time using this
+program.  Select "Yes" to create a new file, "No" to open a different file, and "Cancel" to quit."""
+
+            answer = messagebox.askyesnocancel("Oh no!  File not found!", prompt)
+            if answer:
+                self.new_file_from_picker()
+            elif answer is False:
+                self.select_file_from_picker()
+            else:
+                quit()
+
             self._save(None)
 
         self._refresh(None)
@@ -193,7 +206,12 @@ class App:
             self.text_box.tag_add(tag.name, tag.start, tag.end)
             self.text_box.tag_config(tag.name, **tag.prefs)
             if tag.clickable:
-                url = f"https://{tag.name}"
+
+                if not os.path.isfile(tag.name):
+                    url = f"https://{tag.name}"
+                else:
+                    url = tag.name
+
                 self.text_box.tag_bind(tag.name, sequence="<1>",
                                        func=lambda e, url=url: webbrowser.open(url)  # walrus is for binding
                                        )
