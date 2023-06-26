@@ -5,7 +5,11 @@
 
 clone this repository:  https://github.com/patpragman/notapy.git
 
+www.google.com
+
 run the following code:
+
+
 ```
 # make a virtual environment:
 python -m venv venv
@@ -19,6 +23,7 @@ pip install -r requirements.txt
 # run with
 
 python main.py
+
 ```
 
 

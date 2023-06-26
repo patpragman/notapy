@@ -16,3 +16,8 @@ font=["Helvetica", 12, "bold"]
 foreground = "blue"
 underline = 1
 clickable = 1
+
+["```([\\s\\S]*?)```"]
+foreground = 'black'
+background = "gray"
+multiline = 1

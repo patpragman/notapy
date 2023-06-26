@@ -177,12 +177,13 @@ program.  Select "Yes" to create a new file, "No" to open a different file, and 
         else:
             format_dictionary.pop("match")
 
+        protected = ["multiline", "clickable"]
         for key in format_dictionary:
             clickable = "clickable" in format_dictionary[key]
-            prefs = {k: v for k, v in format_dictionary[key].items() if k != "clickable"}
+            prefs = {k: v for k, v in format_dictionary[key].items() if k not in protected}
             pattern = re.compile(key)
 
-            # now go through all the rows in the text box
+            # now go through all the rows in the text box for single line
             for row, content in enumerate(current_text.split("\n")):
                 matches = [(m.start(), m.end()) for m in re.finditer(pattern, content) if m]
 
@@ -201,12 +202,35 @@ program.  Select "Yes" to create a new file, "No" to open a different file, and 
                     # add them to the tag list
                     self.tag_list.append(tag)
 
+        # multiline stuff is a bit harder... but not crazy
+        for key in format_dictionary:
+            clickable = "clickable" in format_dictionary[key]
+            if "multiline" not in format_dictionary[key]:
+                # only work with multiline formats
+                continue
+
+            prefs = {k: v for k, v in format_dictionary[key].items()
+                     if k not in protected}  # only include preferences that will parse in the tags
+
+            pattern = re.compile(key)
+            matches = [(m.start(), m.end()) for m in re.finditer(pattern, current_text) if m]
+            for match in matches:
+                start, end = match
+                match_text = current_text[start: end].split('\n')[0]
+                row_1 = current_text[0: start].count("\n") + 1
+                rows_covered = current_text[start: end].count("\n")
+
+                start_index = current_text.split("\n")[row_1 - 1].index(match_text)
+
+                tag = Tag(current_text[start:end], row_1, start_index, row_1 + rows_covered, end, prefs=prefs, clickable=clickable)
+                self.tag_list.append(tag)
+
         # now go through the tag list, apply all the tags
         for tag in self.tag_list:
             self.text_box.tag_add(tag.name, tag.start, tag.end)
             self.text_box.tag_config(tag.name, **tag.prefs)
-            if tag.clickable:
 
+            if tag.clickable:
                 if not os.path.isfile(tag.name):
                     if "https://" not in tag.name:
                         url = f"https://{tag.name}"
