@@ -4,13 +4,8 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import messagebox, PhotoImage
 import re
 import webbrowser
-from PIL import Image, ImageTk
-
-
 from tkinter import filedialog as fd
-
 import toml
-
 import config
 from menu_framework import FileMenu, AboutMenu, EditMenu
 
@@ -73,8 +68,6 @@ class App:
                               menu=AboutMenu(self.menu, self))
 
         self.root.config(menu=self.menu)
-
-
 
 
         # widgets
@@ -229,7 +222,8 @@ program.  Select "Yes" to create a new file, "No" to open a different file, and 
                               row + 1,
                               end,
                               prefs=prefs,
-                              clickable=clickable, image_file=image_file)
+                              clickable=clickable,
+                              image_file=image_file, render_latex=render_latex)
 
                     # add them to the tag list
                     self.tag_list.append(tag)
@@ -276,19 +270,13 @@ program.  Select "Yes" to create a new file, "No" to open a different file, and 
                                            )
 
             if tag.render_latex:
-                print(tag.render_latex)
+                pass
 
             if tag.image_file:
+                self.text_box.tag_bind(tag.name, sequence="<1>",
+                                       func=lambda e: webbrowser.open(tag.name[5:-6])
+                                       )
 
-                image = Image.open(tag.name[1:-1])
-                new_width = 128
-                aspect_ratio = image.height / image.width
-                new_height = int(new_width*aspect_ratio)
-                image = image.resize((new_width, new_height))
-                photo_image = ImageTk.PhotoImage(image)
-
-                tag.photo_image = photo_image
-                self.text_box.image_create(tag.end, image=tag.photo_image)
 
     def _clear(self):
         self.text_box.delete("1.0", tk.END)

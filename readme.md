@@ -5,8 +5,6 @@
 
 clone this repository:  https://github.com/patpragman/notapy.git
 
-www.google.com
-
 run the following code:
 
 

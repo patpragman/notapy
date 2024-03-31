@@ -1,5 +1,5 @@
 import tkinter as tk
-import os
+import webbrowser
 
 
 class FileMenu(tk.Menu):
@@ -57,13 +57,13 @@ class AboutMenu(tk.Menu):
     def __init__(self,
                  parent,
                  app,
-                 about_command=lambda: print('About Clicked from Menu'),
-                 help_command=lambda: print('Help Clicked from Menu'),
+                 about_command=lambda: webbrowser.open("https://github.com/patpragman/notapy"),
+                 help_command=lambda: webbrowser.open("https://www.pragman.io"),
                  ):
         super().__init__()
 
         self.parent = parent
         self.app = app
 
-        self.add_command(label="About", command=about_command)
-        self.add_command(label="Help", command=help_command)
+        self.add_command(label="Project Github", command=about_command)
+        self.add_command(label="About Me", command=help_command)

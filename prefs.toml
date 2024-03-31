@@ -21,8 +21,10 @@ underline = 1
 clickable = 1
 
 # commented out for now
-#["\\%(.*?)\\%"]
-#image_file = 1
+["<img>(.*?)</img>"]
+underline = 1
+foreground = "lightgreen"
+image_file = 1
 
 ["(?<=\\$)(.*)(?=\\$)"]
 foreground = "yellow"
