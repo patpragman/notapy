@@ -6,6 +6,9 @@ underline = 1
 ["(?<=# )(.*)(?=$)"]
 font=["Helvetica", 18, "bold"]
 
+["\\*(.*?)\\*"]
+font=["Helvetica", 12, "italic"]
+
 ["(?<=## )(.*)(?=$)"]
 font=["Helvetica", 14, "bold"]
 
@@ -16,6 +19,10 @@ font=["Helvetica", 12, "bold"]
 foreground = "blue"
 underline = 1
 clickable = 1
+
+# commented out for now
+#["\\%(.*?)\\%"]
+#image_file = 1
 
 ["(?<=\\$)(.*)(?=\\$)"]
 foreground = "yellow"

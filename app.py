@@ -1,9 +1,11 @@
 import os
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
-from tkinter import messagebox
+from tkinter import messagebox, PhotoImage
 import re
 import webbrowser
+from PIL import Image, ImageTk
+
 
 from tkinter import filedialog as fd
 
@@ -23,7 +25,8 @@ class Tag:
                  prefs=None,
                  url=None,
                  clickable=0,
-                 render_latex=None):
+                 render_latex=None,
+                 image_file=None):
         self.name = name
         self.start = f"{row_1}.{start}"
         self.end = f"{row_2}.{end}"
@@ -31,16 +34,16 @@ class Tag:
         self.clickable = clickable
         self.prefs = prefs
         self.render_latex = render_latex
+        self.image_file = image_file
 
 
 class App:
     def __init__(self):
         # set up the main window for the app
         self.root = tk.Tk()
-        self.root.title('NotaPy')
+        self.root.title('PatNotes 2.0')
         self.root.geometry('512x512')
-        self.root.minsize(128, 256)
-        self.root.maxsize(1024, 768)
+        self.root.minsize(512, 256)
 
         # tk variables
         self.search_bar_variable = tk.StringVar(self.root)
@@ -51,7 +54,7 @@ class App:
         self.tag_list = []
 
         # top menu bar
-        self.menu = tk.Menu(self.root)
+        self.menu = tk.Menu(self.root, bg=config.editor_background_color, fg=config.editor_text_color)
         self.menu.add_cascade(label="File",
                               menu=FileMenu(self.menu, self,
                                             new_command=self.new_file_from_picker,
@@ -71,15 +74,32 @@ class App:
 
         self.root.config(menu=self.menu)
 
+
+
+
         # widgets
-        self.top_label = tk.Label(self.root, textvariable=self.file_path_variable)
+        self.top_label = tk.Label(self.root,
+                                  textvariable=self.file_path_variable,
+                                  bg=config.editor_background_color, fg=config.editor_text_color
+                                  )
         self.search_bar_label = tk.Label(self.root,
-                                         text="Search:")
+                                         text="Search:",
+                                         bg=config.editor_background_color, fg=config.editor_text_color
+                                         )
 
         self.search_bar = tk.Entry(self.root)
         self.search_bar_results_label = tk.Label(self.root,
-                                                 textvariable=self.search_bar_label)
-        self.text_box = ScrolledText(self.root)
+                                                 textvariable=self.search_bar_label,
+                                                 bg=config.editor_background_color, fg=config.editor_text_color
+                                                 )
+        self.text_box = ScrolledText(self.root,
+                                     bg=config.editor_background_color,
+                                     fg=config.editor_text_color,
+                                     highlightcolor=config.editor_highlight_color,
+                                     insertbackground=config.editor_cursor_color,
+                                     # wrap="none", # turn on our off as desired
+                                     tabs=(config.tab,)
+                                     )
 
         # bind the keyboard controls
         self.search_bar.bind("<KeyRelease>", self._refresh)
@@ -142,6 +162,8 @@ class App:
                 self.text_box.insert(tk.END,
                                      notes_file.read()
                                      )
+                self.text_box.see(tk.END)
+
         except FileNotFoundError as file_error:
             prompt = """I cannot find the file you were last working on, that or this is your first time using this
 program.  Select "Yes" to create a new file, "No" to open a different file, and "Cancel" to quit."""
@@ -178,10 +200,12 @@ program.  Select "Yes" to create a new file, "No" to open a different file, and 
         else:
             format_dictionary.pop("match")
 
-        protected = ["multiline", "clickable", 'render_latex']
+        protected = ["multiline", "clickable", 'render_latex', "image_file"]
         for key in format_dictionary:
             clickable = "clickable" in format_dictionary[key]
             render_latex = "render_latex" in format_dictionary[key]
+            image_file = "image_file" in format_dictionary[key]
+
             prefs = {k: v for k, v in format_dictionary[key].items() if k not in protected}
             pattern = re.compile(key)
 
@@ -199,7 +223,7 @@ program.  Select "Yes" to create a new file, "No" to open a different file, and 
                               row + 1,
                               end,
                               prefs=prefs,
-                              clickable=clickable)
+                              clickable=clickable, image_file=image_file)
 
                     # add them to the tag list
                     self.tag_list.append(tag)
@@ -247,6 +271,18 @@ program.  Select "Yes" to create a new file, "No" to open a different file, and 
 
             if tag.render_latex:
                 print(tag.render_latex)
+
+            if tag.image_file:
+
+                image = Image.open(tag.name[1:-1])
+                new_width = 128
+                aspect_ratio = image.height / image.width
+                new_height = int(new_width*aspect_ratio)
+                image = image.resize((new_width, new_height))
+                photo_image = ImageTk.PhotoImage(image)
+
+                tag.photo_image = photo_image
+                self.text_box.image_create(tag.end, image=tag.photo_image)
 
     def _clear(self):
         self.text_box.delete("1.0", tk.END)
