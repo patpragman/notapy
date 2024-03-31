@@ -87,7 +87,13 @@ class App:
                                          bg=config.editor_background_color, fg=config.editor_text_color
                                          )
 
-        self.search_bar = tk.Entry(self.root)
+        self.search_bar = tk.Entry(self.root,
+                                   bg=config.editor_background_color,
+                                   fg=config.editor_text_color,
+                                   highlightcolor=config.editor_highlight_color,
+                                   insertbackground=config.editor_cursor_color,
+
+                                   )
         self.search_bar_results_label = tk.Label(self.root,
                                                  textvariable=self.search_bar_label,
                                                  bg=config.editor_background_color, fg=config.editor_text_color
