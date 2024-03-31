@@ -22,13 +22,15 @@ class Tag:
                  end,
                  prefs=None,
                  url=None,
-                 clickable=0):
+                 clickable=0,
+                 render_latex=None):
         self.name = name
         self.start = f"{row_1}.{start}"
         self.end = f"{row_2}.{end}"
 
         self.clickable = clickable
         self.prefs = prefs
+        self.render_latex = render_latex
 
 
 class App:
@@ -55,7 +57,6 @@ class App:
                                             new_command=self.new_file_from_picker,
                                             load_command=self.select_file_from_picker,
                                             quit_command=self.quit,
-
                                             )
                               )
         self.menu.add_cascade(label="Edit",
@@ -177,9 +178,10 @@ program.  Select "Yes" to create a new file, "No" to open a different file, and 
         else:
             format_dictionary.pop("match")
 
-        protected = ["multiline", "clickable"]
+        protected = ["multiline", "clickable", 'render_latex']
         for key in format_dictionary:
             clickable = "clickable" in format_dictionary[key]
+            render_latex = "render_latex" in format_dictionary[key]
             prefs = {k: v for k, v in format_dictionary[key].items() if k not in protected}
             pattern = re.compile(key)
 
@@ -241,7 +243,10 @@ program.  Select "Yes" to create a new file, "No" to open a different file, and 
 
                 self.text_box.tag_bind(tag.name, sequence="<1>",
                                        func=lambda e, url=url: webbrowser.open(url)  # walrus is for binding
-                                       )
+                                           )
+
+            if tag.render_latex:
+                print(tag.render_latex)
 
     def _clear(self):
         self.text_box.delete("1.0", tk.END)

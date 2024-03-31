@@ -45,9 +45,10 @@ get cluttered up.
 ### Future Plans
 
 * LaTex Support - I would like real time latex rendering
-* more formatting stuff - in particular a regex for code
 * LLM support where you could highlight text, right click on it, then have chatgpt improve the writing
 * some popup cheat sheets for regex stuff
 * darkmode
 * export to pdf?
 * image embedding?
+
+

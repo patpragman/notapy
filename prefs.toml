@@ -17,6 +17,11 @@ foreground = "blue"
 underline = 1
 clickable = 1
 
+["(?<=\\$)(.*)(?=\\$)"]
+foreground = "yellow"
+background = "black"
+render_latex = 1
+
 ["```([\\s\\S]*?)```"]
 foreground = 'black'
 background = "gray"
