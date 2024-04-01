@@ -8,6 +8,7 @@ from tkinter import filedialog as fd
 import toml
 import config
 from menu_framework import FileMenu, AboutMenu, EditMenu
+import pyperclip
 
 class Tag:
 
@@ -123,11 +124,13 @@ class App:
 
     def paste(self):
         string_to_paste = self.root.clipboard_get()
+        print(string_to_paste)
         self.text_box.insert(tk.INSERT, string_to_paste)
 
     def copy(self):
-        command = f'echo "{self.text_box.selection_get()[0:-1]}" | xclip -sel c -f'
-        os.system(command)
+        pyperclip.copy(self.text_box.selection_get())
+        #command = f'echo "{self.text_box.selection_get()[0:-1]}" | xclip -sel c -f'
+        #os.system(command)
 
     def select_all(self):
         self.text_box.tag_add(tk.SEL, "1.0", tk.END)
