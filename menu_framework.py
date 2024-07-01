@@ -67,3 +67,18 @@ class AboutMenu(tk.Menu):
 
         self.add_command(label="Project Github", command=about_command)
         self.add_command(label="About Me", command=help_command)
+
+
+class PopupMenu(tk.Menu):
+    # todo: set up popup window here
+    def __init__(self,
+                 parent,
+                 commands=((lambda: print(f'hello world'), f"Function {i}") for i in range(0, 5))
+                 ):
+        super().__init__()
+
+        self.parent = parent
+
+        for command, label in commands:
+            self.add_command(label=label, command=command)
+

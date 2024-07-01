@@ -7,7 +7,7 @@ import webbrowser
 from tkinter import filedialog as fd
 import toml
 import config
-from menu_framework import FileMenu, AboutMenu, EditMenu
+from menu_framework import FileMenu, AboutMenu, EditMenu, PopupMenu
 import pyperclip
 
 class Tag:
@@ -101,10 +101,20 @@ class App:
                                      tabs=(config.tab,)
                                      )
 
+        self.popup_menu = PopupMenu(self)
+
         # bind the keyboard controls
         self.search_bar.bind("<KeyRelease>", self._refresh)
         self.text_box.bind("<KeyRelease>", self._refresh)
         self.root.bind("<Escape>", lambda event: self.quit())
+
+        # bind right clicks
+        def on_right_click(event):
+            try:
+                self.popup_menu.tk_popup(event.x_root, event.y_root)
+            finally:
+                self.popup_menu.grab_release()
+        self.root.bind("<Button-3>", on_right_click)
 
         # pack the widgets
         self.top_label.pack(fill=tk.X)
@@ -116,6 +126,8 @@ class App:
 
         self._load(None)
         self._refresh(None)
+
+
 
     def cut(self):
         command = f'echo "{self.text_box.selection_get()[0:-1]}" | xclip -sel c -f'
